@@ -43,10 +43,12 @@ public class AppAgenda {
 
 
         agendaJorge.OrdenarContactosOrdenAlfabetico();
-
-
-
-
+        System.out.println(" \n ");
+        System.out.println("   lista contactos  \n ");
+        for (Contacto contact : agendaJorge.getContactos()) {
+            System.out.println("Contacto #" + agendaJorge.getContactos().indexOf(contact) + ". Nombre " + contact.getNombre()
+                    + " , Apellido: " + contact.getApellido() + " ,  Número Celular: " + contact.getNumeroCelular());
+        }
 
     }
 }

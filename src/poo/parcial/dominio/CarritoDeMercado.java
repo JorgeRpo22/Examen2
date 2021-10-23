@@ -1,8 +1,8 @@
 package poo.parcial.dominio;
 
-import poo.taller.punto2b.dominio.Contacto;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,72 +17,108 @@ public class CarritoDeMercado {
         this.productos = new ArrayList<>();
     }
 
-    //public boolean agregar(Producto p) {
-    //    return true;
-    //}
-
     public Producto buscar(String nombre) {
-        Producto buscarProducto = this.productos.stream().filter(producto -> {
-            return producto.getNombre() == nombre;
-        }).findFirst().orElse(null);
+        Producto productoBuscado = null;
 
-        if (buscarProducto != null) {
-            System.out.println("Se encontró el producto: " + nombre);
-        } else {
-            System.out.println("No se encontró el producto " + nombre + "en el carrito");
-        }
-        return buscarProducto;
+        //Funcional
+        productoBuscado = this.productos.stream()
+                .filter(producto -> producto.getNombre().equalsIgnoreCase(nombre))
+                .findFirst().get();
+
+        //Tradicional
+//        for (Producto produc: this.productos) {
+//            if (produc.getNombre().equalsIgnoreCase(nombre)) {
+//                productoBuscado = produc;
+//                break;
+//            }
+//        }
+
+        return productoBuscado;
     }
 
-    public List<String> buscarPorTipo(String tipo) {
-        ArrayList<String> buscarProduct = new ArrayList<String>();
-        for (int i = 0; i < this.productos.size(); i++) {
-            if (this.productos.get(i).getTipo().equals(tipo)) {
-                buscarProduct.add(this.productos.get(i).getTipo());
-            }
+    public List<Producto> buscarPorTipo(String tipo) {
+        List<Producto> buscarProduct = new ArrayList<>();
+
+        //Verifico sí el tipo existe
+        if (TipoProducto.TIPOS.stream().filter(p -> p.equalsIgnoreCase(tipo)).findFirst().isPresent()) {
+            //Funcional
+            buscarProduct = this.productos.stream()
+                    .filter(producto -> producto.getTipo().equalsIgnoreCase(tipo))
+                    .collect(Collectors.toList());
+
+            System.out.println(buscarProduct);
+            return buscarProduct;
+        } else {
+            System.out.println("El tipo de producto no existe");
+            return null;
         }
-        System.out.println("Los productos que se encuentran agotados son: " + buscarProduct );
-        return buscarProduct;
+    }
+
+    public boolean agregar(Producto producto) {
+        if (this.productos.size() < CAPACIDAD) {
+            this.productos.add(producto);
+            return true;
+        }
+
+        return false;
     }
 
     public boolean sacar(String nombre) {
-        for (Producto produc: this.getProductos()) {
-            if (produc.getNombre().equals(nombre) ){
-                List<String> nombresProductos = this.productos.stream().map(producto -> producto.getNombre()).collect(Collectors.toList());
-                int indiceProducto = nombresProductos.indexOf(nombre);
-                getProductos().remove((indiceProducto + 1));
-                System.out.println("Se eliminó exitosamente el producto: " + produc.getNombre() + "del carrito");
-                return true;
-            }
+        Producto productoASacar = buscar(nombre);
+
+        if (productoASacar != null) {
+            this.productos.remove(productoASacar);
+            return true;
         }
         return false;
+
+//        for (Producto produc: this.getProductos()) {
+//            if (produc.getNombre().equals(nombre) ){
+//                List<String> nombresProductos = this.productos.stream().map(producto -> producto.getNombre()).collect(Collectors.toList());
+//                int indiceProducto = nombresProductos.indexOf(nombre);
+//                getProductos().remove((indiceProducto));
+//                System.out.println("Se eliminó exitosamente el producto: " + produc.getNombre() + " del carrito");
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     public int calcularValorTotal() {
         int totalPrecio = 0;
-        for (int i = 0; i < this.productos.size(); i++) {
-            totalPrecio += this.productos.get(i).getPrecio();
-        }
-        System.out.println(totalPrecio + " es el total de su compra");
+
+        //Tradicional
+//        for (int i = 0; i < this.productos.size(); i++) {
+//            Producto prod = this.productos.get(i);
+//
+//            totalPrecio += prod.getPrecio();
+//        }
+//
+//        for (Producto prod : this.productos) {
+//            totalPrecio += prod.getPrecio();
+//        }
+
+        //Funcional
+        totalPrecio = this.productos.stream()
+                .mapToInt(Producto::getPrecio)
+                .sum();
+
         return totalPrecio;
     }
 
     public Producto obtenerProductoMasCaro() {
-        this.getProductos().stream().mapToInt(Producto::getPrecio);
-        int precioCaro = obtenerProductoMasCaro().getPrecio();
-        for (Producto producCaro: this.getProductos()) {
-            if (producCaro.getPrecio() == obtenerProductoMasCaro().getPrecio() ){
-                Producto nombresProductosCaros = this.getProductos().stream()
-                        .filter(producto -> {
-                            return producto.getPrecio() == obtenerProductoMasCaro().getPrecio();
-                        }).findFirst().orElse(null);
+        Producto productoMasCaro = null;
 
-                return true;
-            }
-        }
-        return false;
+        //Tradicional
+//        for (Producto prod : this.productos) {
+//            if (prod.getPrecio() > productoMasCaro.getPrecio()) {
+//                productoMasCaro = prod;
+//            }
+//        }
 
-        }
+        //Funcional
+        Collections.sort(this.productos, Comparator.comparingInt(Producto::getPrecio).reversed());
+        return this.productos.get(0);
     }
 
     public String getSupermercado() {
