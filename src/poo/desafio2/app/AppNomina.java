@@ -22,9 +22,13 @@ public class AppNomina {
         nomina.getEmpleados().add(david);
         nomina.getEmpleados().add(gustavo);
 
+        System.out.println("\n     Nomina");
         nomina.calcularNomina();
+        System.out.println("\n     Empleados Directos");
         nomina.listarDirectos();
+        System.out.println("\n     Empleados Freelancers");
         nomina.listarFreelancers();
+        System.out.println("\n     Empleados Promotores");
         nomina.listarPromotores();
 
     }

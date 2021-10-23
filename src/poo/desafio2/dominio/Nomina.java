@@ -18,7 +18,7 @@ public class Nomina {
     public void calcularNomina() {
         empleados.forEach(emp -> {
             if (emp instanceof Empleado) {
-                System.out.println(emp.getNombre() + " Salario: " + emp.calcularSalario());
+                System.out.println(emp.getNombre() + "  Salario: " + emp.calcularSalario());
             }
         });
     }
