@@ -7,14 +7,6 @@ import java.util.ArrayList;
 public class Nomina {
     private ArrayList<Empleado> empleados = new ArrayList<>();
 
-    Empleado juan = new Directo("Juan", 6812000);
-    Empleado julian = new Vendedor("Julián", 2410000, 62106200);
-    Empleado johanna = new Freelance("Johanna", 120000, 79);
-    Empleado carolina = new Vendedor("Carolina",998000,71589600);
-    Empleado pedro = new Promotor("Pedro", 974,190, 68);
-    Empleado david = new Directo("David", 3578000);
-    Empleado gustavo = new Freelance("Gustavo", 70500,64);
-
     public void calcularNomina() {
         empleados.forEach(emp -> {
             if (emp instanceof Empleado) {
@@ -26,11 +18,11 @@ public class Nomina {
     public void listarDirectos() {
         empleados.forEach(emp -> {
             if (emp instanceof Directo || emp instanceof Vendedor) {
-               if (emp instanceof Directo) {
-                   System.out.println(emp.getNombre() + " Tiene un contrato como empleado directo.");
-               } else {
-                   System.out.println(emp.getNombre() + " Tiene un contrato como vendedor");
-               }
+                if (emp instanceof Directo) {
+                    System.out.println(emp.getNombre() + " Tiene un contrato como empleado directo.");
+                } else {
+                    System.out.println(emp.getNombre() + " Tiene un contrato como vendedor");
+                }
             }
         });
     }

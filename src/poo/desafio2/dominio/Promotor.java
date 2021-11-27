@@ -1,6 +1,8 @@
 package poo.desafio2.dominio;
 
 public class Promotor extends Empleado{
+    public static final int VALOR_COMISION_POR_COMPRA_CON_VOLANTE = 17000;
+
     private int volantesRepartidos;
     private long valorVolante;
     private int comprasVolante;
@@ -14,7 +16,7 @@ public class Promotor extends Empleado{
 
     @Override
     public long calcularSalario() {
-        long saldo = (volantesRepartidos*valorVolante)+(comprasVolante*17000);
+        long saldo = (volantesRepartidos*valorVolante)+(comprasVolante*VALOR_COMISION_POR_COMPRA_CON_VOLANTE);
         return saldo;
     }
 }

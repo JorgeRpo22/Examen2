@@ -1,0 +1,100 @@
+package poo.EjercicioPractica.dominio;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Biblioteca {
+    private String nombre;
+    private List<Recurso> recursos;
+
+    public Biblioteca(String nombre) {
+        this.nombre = nombre;
+        this.recursos = new ArrayList<>();
+    }
+
+    public void addRecurso(Recurso... r) {
+        this.recursos.addAll(Arrays.asList(r));
+    }
+
+    public boolean prestarRecurso(Recurso r) {
+        if (r instanceof Prestable) {
+            if (r.isPrestado() == false) {
+                ((Prestable) r).prestar();
+                System.out.println("Se ha prestado el articulo: " + r.getNombre() + "  con exito.");
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            System.out.println("No es un articulo prestable");
+            return false;
+        }
+    }
+
+    public boolean devolverRecurso(Recurso r) {
+        if (r instanceof Prestable) {
+            if (r.isPrestado() == true) {
+                ((Prestable) r).devolver();
+                System.out.println("Gracias por devolver el articulo: " + r.getNombre() + " regrese pronto");
+                return false;
+            } else {
+                System.out.println("El articulo" + r.getNombre() + " ya ha sido devuelto");
+                return true;
+            }
+        } else {
+            System.out.println("El articulo no se puede recibir, porque no es un recurso que se pueda prestar.");
+        }
+        return false;
+    }
+
+    public boolean fotocopiarRecurso(Recurso r) {
+        int cantidadCopias = 0;
+
+        if (r instanceof Copiable) {
+            if (r.isPrestado() == false) {
+                ((Copiable) r).fotocopiar();
+                cantidadCopias ++;
+                cantidadCopias = r.getCopias();
+                System.out.println("El articulo se copio con exito");
+                return true;
+            } else {
+                System.out.println("El articulo no se puede copiar");
+                return false;
+            }
+        } else {
+            System.out.println("El articulo no se puede copiar");
+            return false;
+        }
+    }
+
+
+    public void listarPrestados() {
+        AtomicInteger cantidadPrestados = new AtomicInteger();
+
+        recursos.forEach(recurso -> {
+            if (recurso.isPrestado() == true) {
+                cantidadPrestados.incrementAndGet();
+                System.out.println("Articulos prestados: " + recurso);
+            }
+        });
+
+        System.out.println("La cantidad de prestados es: " + cantidadPrestados);
+
+    }
+
+    public void listarCopiasPorRecurso() {
+        AtomicInteger cantidadImpresos = new AtomicInteger();
+
+        recursos.forEach(recurso -> {
+            if (recurso instanceof Copiable) {
+                cantidadImpresos.incrementAndGet();
+                System.out.println("El articulo: " + recurso + " Se ha copiado: " + recurso.getCopias() + " veces");
+            }
+        });
+
+        //System.out.println("La cantidad de total de libros que se pueden copiar: " + cantidadImpresos);
+
+    }
+}
